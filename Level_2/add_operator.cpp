@@ -1,38 +1,35 @@
 #include <iostream>
 using namespace std;
 
-int	cal(int *nums, int oper[4], int i, int n, int pre_ans)
+int m_max = -1000000001;
+int m_min = 1000000001;
+void	cal(int *nums, int oper[4], int n, int res, int idx)
 {
-	int ret, pre, next;
-	next = pre_ans;
-	pre = nums[i];
-
-	cout << pre << ' ' << ' ' << next << endl;
-	switch (i)
+	if (idx == n)
 	{
-	case 0:
-		ret = pre + next;
-		break;
-	case 1:
-		ret = pre - next;
-		break;
-	case 2:
-		ret = pre * next;
-		break;
-	case 3:
-		if (pre < 0 && next > 0)
-			ret = -1 * ((-1 * pre) / next);
-		else if (pre > 0 && next < 0)
-			ret = -1 * (pre / (-1 * next));
-		else
-			ret = pre / next;
-		break;
-	default:
-		break;
+		if (res > m_max)
+			m_max = res;
+		if (res < m_min)
+			m_min = res;
+		return;
 	}
-	cal(nums, oper, i--, n - 1, ret);
-	cout << "ret : " << ret << ' ';
-	return (ret);
+	for(int i = 0; i < 4; i++)
+	{
+		if (oper[i] > 0)
+		{
+			oper[i]--;
+			if (i == 0)
+				cal(nums, oper, n, res + nums[idx], idx+1);
+			else if (i == 1)
+				cal(nums, oper, n, res - nums[idx], idx+1);
+			else if (i == 2)
+				cal(nums, oper, n, res * nums[idx], idx+1);
+			else
+				cal(nums, oper, n, res / nums[idx], idx+1);
+			oper[i]++;
+		}
+	}
+	return;
 }
 
 int main()
@@ -46,6 +43,7 @@ int main()
 	for (int i = 0; i < 4; i++)
 		cin >> oper[i];
 	
-	cout << cal(nums, oper, n-2, n - 1, nums[n-1]);
+	cal(nums, oper, n, nums[0], 1);
+	cout << m_max << endl << m_min;
 	delete[] nums;
 }

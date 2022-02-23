@@ -6,58 +6,55 @@ using namespace std;
 
 string str;
 stack<char> bar;
-stack<bool> oper;
-stack<int> nums;
-int ans;
+int ans(0), temp(1);
 
-void	cal(int i)
+void	cal(string str)
 {
-	int a, b;
-	if (i == 0)
-		oper.push(true);
-	while (!(oper.empty()))
+	int i = 0;
+	while (str[i])
 	{
-		a = nums.top();
-		nums.pop();	
-		b = nums.top();
-		nums.pop();
-		if (oper.top())
-			ans = a * b;
-		else
-			ans = a + b;
-		oper.pop();
-		nums.push(ans);
+		if (str[i] == '(')
+			temp *= 2;
+		else if (str[i] == '[')
+			temp *= 3;
+		else if (str[i] == ')')
+		{
+			if (str[i-1] == '(')
+			{
+				ans += temp;
+				temp /= 2;
+			}
+			else
+				temp /= 2;
+		}
+		else if (str[i] == ']')
+		{
+			if (str[i-1] == '[')
+			{
+				ans += temp;
+				temp /= 3;
+			}
+			else
+				temp /= 3;
+		}
+		i++;
 	}
 }
+
 int main()
 {
-	char temp;
 	int i = 0;
 	cin >> str;
 	while (str[i] != '\0')
 	{
 		if (str[i] == '(')
-		{
 			bar.push(str[i]);
-			nums.push(2);
-		}
 		else if (str[i] == '[')
-		{
 			bar.push(str[i]);
-			nums.push(3);
-		}
 		else if (!bar.empty() && str[i] == ')')
 		{
 			if (bar.top() == '(')
-			{
 				bar.pop();
-				if (str[i+1] == '\0')
-					cal(1);
-				else if (str[i+1] == '[' || str[i+1] == '(')
-					oper.push(false);
-				else
-					cal(0);
-			}
 			else break;
 		}
 		else if (!bar.empty() && str[i] == ']')
@@ -65,12 +62,6 @@ int main()
 			if (bar.top() == '[')
 			{
 				bar.pop();
-				if (str[i+1] == '\0')
-					cal(1);
-				else if (str[i+1] == '[' || str[i+1] == '(')
-					oper.push(false);
-				else
-					cal(0);
 			}
 			else break;
 		}
@@ -81,5 +72,8 @@ int main()
 	if (!bar.empty())
 		cout << '0';
 	else
-		cout << ans << endl;
+	{	
+		cal(str);
+		cout << ans*temp << endl;
+	}
 }

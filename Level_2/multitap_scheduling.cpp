@@ -4,48 +4,65 @@ using namespace std;
 int n,k,ans(0);
 int *nums;
 int mul[100];
-int prio[100];
 
-int check_priority()
-{
-	int min_idx(0), min_val(101);
-	for (int i=0;i<n;i++)
-	{
-		if (prio[mul[i]] < min_val)
-		{
-			min_idx = i;
-			min_val = prio[mul[i]];
-		}
-	}
-	return (min_idx);
-}
+/*
+컨디션 3개
+1)이미 콘센트에 있는 경우
+2)콘센트에 빈 자리가 있는 경우 
+3)콘센트에 빈 자리가 없는 경우
+1), 2)번의 경우에는 콘센트를 빼지 않음
 
-void scheduling()
+3)번의 경우에 어떤 콘센트를 빼야하나
+ i )가장 나중에 다시 사용되거나
+ ii)앞으로 사용되지 않는 기기
+*/
+void	scheduling()
 {
-	bool flag(false);
-	int c_idx(0);
-	for (int i=n;i<k;i++)
+	for (int i = 0; i < k; i++)
 	{
-		flag = false;
-		for (int j=0;j<n;j++)
+		bool flag(false);
+
+		for (int j = 0; j < n; j++)
 		{
-			if (nums[i] == mul[j])
+			if (mul[j] == nums[i])
 			{
 				flag = true;
 				break;
 			}
 		}
-		if (!flag)
-		{	
-			c_idx = check_priority();
-			mul[c_idx] = nums[i];
-			cout << "\nafter : ";
-			for (int i=0;i<n;i++)
-				cout << mul[i] << ' ';
-			cout << ": " << nums[i];
-			ans++;
+		if (flag)
+			continue;
+		//위는 경우 1)일 때
+		for (int j = 0; j < n; j++)
+		{
+			if (mul[j] == 0)
+			{
+				mul[j] = nums[i];
+				flag = true;
+				break;
+			}
 		}
-		prio[nums[i]]--;
+		if (flag)
+			continue;
+		// 위의 경우 2)일 때
+		int c_idx(-1), min_idx(-1);
+		for (int j = 0; j < n; j++)
+		{
+			int lastidx(0);
+			for (int a = i + 1; a < k; a++)
+			{
+				if (mul[j] == nums[a])
+					break;
+				lastidx++;
+			}
+			if (lastidx > min_idx)
+			{
+				c_idx = j;
+				min_idx = lastidx;
+			}
+		}
+		ans++;
+		mul[c_idx] = nums[i];
 	}
 }
 
@@ -55,14 +72,6 @@ int main()
 	nums = new int[k];
 	for (int i=0;i<k;i++)
 		cin >> nums[i];
-	for (int i=0;i<k;i++)
-		prio[nums[i]]++;
-	for (int i=0;i<n;i++)
-	{
-		mul[i] = nums[i];
-		prio[nums[i]]--;
-	}
-
 	scheduling();
 	cout << ans;
 	delete[] nums;

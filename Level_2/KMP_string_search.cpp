@@ -1,5 +1,5 @@
 #include <iostream>
-#include <sting.h>
+#include <string.h>
 
 using namespace std;
 

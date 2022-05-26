@@ -22,6 +22,7 @@ void bfs()
 			if(mat[cur][i] == 1 && vis[i] == false)
 			{
 				q.push(i);
+				vis[i] = true;
 				ans++;
 			}
 		}

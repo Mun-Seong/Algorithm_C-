@@ -2,6 +2,7 @@
 	"files.associations": {
 		"*.ejs": "html",
 		"ostream": "cpp",
-		"random": "cpp"
+		"random": "cpp",
+		"tuple": "cpp"
 	}
 }

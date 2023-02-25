@@ -1,0 +1,30 @@
+anta tica
+antic 5
+rchellocar
+antic rhelo
+경우의 수 5
+r 3
+h 0
+e 0
+l 0
+o 0
+
++3개의 글자
+bdefghjkx
+b * 8 * 7 = 3
+x * 7 * 6 = 3
+
+t(3,0) b	return = 1
+t(2,1) d	return = 1
+t(1,2) efghjkx return = 1
+
+7 9
+antarotica
+antajapwtica
+antarnlhtica
+antavfytica
+antarwtica
+antaltica
+antantica
+rvwy
+4+ ronlh

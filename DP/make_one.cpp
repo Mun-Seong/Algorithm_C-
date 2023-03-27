@@ -3,24 +3,34 @@
 
 #include <iostream>
 
-int ans[1000000][3];
+int ans[3000001];
 
 int main()
 {
 	// input
 	int N;
-	int res;
 
 	std::cin >> N;
 	// solution
 	int i = 1;
-	ans[0][0] = ans[0][1] = ans[0][2] = N;
+	ans[i] = 0;
 	while(1)
 	{
-		for (int j=0;j<3;++j)
-		{
-			if (ans[i-1][j] % 3 == 0)
-				ans[i-1][0] = ans[i-1][j] / 3;
-		}
+		if (ans[i+1] == 0)
+			ans[i+1] = ans[i] + 1;
+		else
+			ans[i+1] = std::min(ans[i+1], ans[i]+1);
+		if (i + 1 >= N)
+			break;
+		if (ans[i*2] == 0)
+			ans[i*2] = ans[i] + 1;
+		else
+			ans[i*2] = std::min(ans[i*2], ans[i]+1);
+		if (ans[i*3] == 0)
+			ans[i*3] = ans[i] + 1;
+		else
+			ans[i*3] = std::min(ans[i*3], ans[i]+1);
+		++i;
 	}
+	std::cout << ans[N] << std::endl;
 }

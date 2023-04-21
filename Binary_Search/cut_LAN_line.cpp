@@ -21,7 +21,7 @@ int main()
 	}
 	
 	// solution
-	ull	max_len = sum / n, min_len = 1, mid;
+	ull	max_len = sum / n, min_len = 1, mid = (max_len + min_len) / 2;;
 	for (int i=0;i<k;++i)
 		num += have[i] / max_len;
 	if (num >= n)
@@ -34,7 +34,6 @@ int main()
 	while (min_len <= max_len)
 	{
 		num = 0;
-		mid = (max_len + min_len) / 2;
 		for (int i=0;i<k;++i)
 		{
 			if (num >= n)
@@ -45,6 +44,7 @@ int main()
 			min_len = mid + 1;
 		else
 			max_len = mid - 1;
+		mid = (max_len + min_len) / 2;
 	}
 	std::cout << mid << '\n';
 

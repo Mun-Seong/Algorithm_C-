@@ -2,26 +2,43 @@
 // 12015 가장 긴 증가하는 부분 수열 2
 
 #include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
 
 int	n;
 int	arr[1000000];
-int	res[1000000];
+std::vector<int>	s;
 
-int	bin_search(int cnt, int i)
+void	binary_search(int i)
 {
-	int	start, end, mid;
+	int	start, end, mid, ret;
 	start = 0;
-	end = cnt;
-	
+	end = s.size() - 1;
+	ret = INT_MAX;
 	while (start <= end)
 	{
 		mid = (start + end) / 2;
-		if (arr[i] > res[mid])
-			start = mid + 1;
+		int mid_num = s[mid];
+		if (mid_num >= i) {
+			ret = std::min(ret, mid);
+			end = mid - 1;
+		}
 		else
-			end = mid;
+			start = mid + 1;
 	}
-	return (end);
+	s[ret] = i;
+}
+
+void	find_lis(void)
+{
+	s.push_back(arr[0]);
+	for (int i=1;i<n;++i) {
+		if (s.back() < arr[i])
+			s.push_back(arr[i]);
+		else
+			binary_search(arr[i]);
+	}
 }
 
 int main()
@@ -34,17 +51,8 @@ int main()
 		std::cin >> arr[i];
 	
 	// solution
-	int	cnt = 1, idx;
-	res[0] = arr[0];
-	for (int i=0;i<n;++i) {
-		if (res[cnt-1] < arr[i])
-			res[cnt++] = arr[i];
-		else {
-			idx = bin_search(cnt, i);
-			res[idx] = arr[i];
-		}
-	}
-	std::cout << cnt << '\n';
+	find_lis();
+	std::cout << s.size() << '\n';
 
 	return (0);
 }

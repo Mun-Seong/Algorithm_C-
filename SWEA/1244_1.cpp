@@ -1,5 +1,5 @@
 // SWEA
-// 1244 최대 상금 time over
+// 1244 최대 상금
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // 기본 제공코드는 임의 수정해도 관계 없습니다. 단, 입출력 포맷 주의
@@ -48,21 +48,6 @@ void	swap(int i, int j, string &ans)
 	ans[j] = tmp;
 }
 
-void	dfs(int num, string &ans, int s, int cnt)
-{
-	if (cnt == num) {
-		max_score = max(max_score, ans);
-		return ;
-	}
-	for (int i=s;i<ans.length()-1;++i) {
-		for (int j=i+1;j<ans.length();++j) {
-			swap(i, j, ans);
-			dfs(num, ans, i, cnt+1);
-			swap(i, j, ans);
-		}
-	}
-}
-
 int main(int argc, char** argv)
 {
 	int test_case;
@@ -85,12 +70,14 @@ int main(int argc, char** argv)
 	{
 		// input
 		max_score = "0";
-		string	input, ans;
-		int		num;
+		string	input, ans, max_input;
+		int		num, cnt;
 		cin >> input >> num;
-		ans = input;
+
 		// solution
-		dfs(num, ans, 0, 0);
+		max_input = input;
+		sort(max_input.begin(), max_input.end(), greater<char>());
+		cnt = num > input.length() ? input.length() : num;
 		cout << '#' << test_case << ' ' << max_score << '\n';
 	}
 	return 0;//정상종료시 반드시 0을 리턴해야합니다.

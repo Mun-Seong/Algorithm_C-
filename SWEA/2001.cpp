@@ -1,5 +1,5 @@
 // SWEA
-// 1244 최대 상금 time over
+// 2001 파리 퇴치
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // 기본 제공코드는 임의 수정해도 관계 없습니다. 단, 입출력 포맷 주의
@@ -34,33 +34,22 @@
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
-#include <string>
 #include <algorithm>
 
 using namespace std;
 
-string max_score;
+int	n, m, ans;
+int arr[15][15];
 
-void	swap(int i, int j, string &ans)
+int	check(int i, int j)
 {
-	char tmp = ans[i];
-	ans[i] = ans[j];
-	ans[j] = tmp;
-}
-
-void	dfs(int num, string &ans, int s, int cnt)
-{
-	if (cnt == num) {
-		max_score = max(max_score, ans);
-		return ;
-	}
-	for (int i=s;i<ans.length()-1;++i) {
-		for (int j=i+1;j<ans.length();++j) {
-			swap(i, j, ans);
-			dfs(num, ans, i, cnt+1);
-			swap(i, j, ans);
+	int ret(0);
+	for (int a=0;a<m;++a) {
+		for (int b=0;b<m;++b) {
+			ret += arr[i+a][j+b];
 		}
 	}
+	return (ret);
 }
 
 int main(int argc, char** argv)
@@ -84,14 +73,23 @@ int main(int argc, char** argv)
 	for(test_case = 1; test_case <= T; ++test_case)
 	{
 		// input
-		max_score = "0";
-		string	input, ans;
-		int		num;
-		cin >> input >> num;
-		ans = input;
+		cin >> n >> m;
+		for (int i=0;i<n;++i) {
+			for (int j=0;j<n;++j) {
+				cin >> arr[i][j];
+			}
+		}
+
 		// solution
-		dfs(num, ans, 0, 0);
-		cout << '#' << test_case << ' ' << max_score << '\n';
+		ans = 0;
+		int	tmp;
+		for (int i=0;i<=n-m;++i) {
+			for (int j=0;j<=n-m;++j) {
+				tmp = check(i, j);
+				ans = max(ans, tmp);
+			}
+		}
+		cout <<  '#' << test_case << ' ' << ans << '\n';
 	}
 	return 0;//정상종료시 반드시 0을 리턴해야합니다.
 }

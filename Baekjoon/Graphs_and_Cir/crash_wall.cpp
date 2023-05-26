@@ -5,11 +5,14 @@
 #include <string>
 #include <queue>
 
-typedef std::pair<std::pair<int, int>, std::pair<int, bool>>	piiib;
-// {{r, c}, {cnt, breakable}}
+typedef struct pos
+{
+	int		x, y;
+	bool	has_break;
+} pos;
 
 char	arr[1001][1001];
-bool	vis[1001][1001];
+int		vis[1001][1001][2];
 int		n, m;
 
 int	main()
@@ -25,32 +28,32 @@ int	main()
 	}
 	// solution
 	int ans = -1;
-	std::queue<piiib>	q;
-	q.push({{1, 1}, {1, true}});
+	std::queue<pos>	q;
+	vis[1][1][0] = true;
+	q.push({1,1,0});
 	while (!q.empty()) {
-		piiib	u = q.front();	q.pop();
-		if (u.first.first == n && u.first.second == m) {
-			ans = u.second.first;
+		pos	u = q.front();	q.pop();
+		if (u.x == n && u.y == m) {
+			ans = vis[n][m][u.has_break];
 			break;
 		}
 		int	d[4][2] = {{1,0}, {-1,0}, {0,1}, {0,-1}};
 		for (int i=0;i<4;++i) {
-			int dr = u.first.first + d[i][0];
-			int dc = u.first.second + d[i][1];
+			int dr = u.x + d[i][0];
+			int dc = u.y + d[i][1];
 			if (!(0 < dr && dr <= n) || !(0 < dc && dc <= m))
 				continue;
-			if (!vis[dr][dc]) {
-				if (arr[dr][dc] == '0') {
-					vis[dr][dc] = true;
-					q.push({{dr, dc}, {u.second.first + 1, u.second.second}});
-				}
-				else {
-					if (u.second.second) {
-						vis[dr][dc] = true;
-						q.push({{dr, dc}, {u.second.first + 1, false}});
-					}
-				}
+			if (vis[dr][dc][u.has_break]) 
+				continue;
+			if (arr[dr][dc] == '0') {
+				vis[dr][dc][u.has_break] = vis[u.x][u.y][u.has_break] + 1;
+				q.push({dr, dc, u.has_break});
 			}
+			if (arr[dr][dc] == '1' && u.has_break == false) {
+				vis[dr][dc][1] = vis[u.x][u.y][u.has_break] + 1;
+				q.push({dr, dc, true});
+			}
+			
 		}
 	}
 	std::cout << ans << '\n';

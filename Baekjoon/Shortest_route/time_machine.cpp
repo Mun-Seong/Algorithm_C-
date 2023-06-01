@@ -8,29 +8,31 @@
 
 #define	INF	999999999
 
-int	V, E, v1 ,v2;
-std::vector<std::pair<int, int>>	adj[501];
-//	vector[start] = {end, weight}
+typedef struct edge {
+	int	from;
+	int	to;
+	int	cost;
+}	edge;
 
-std::vector<int>	dijkstra(int s) {
-	std::vector<int>	dist(V+1, INF);
+int	V, E;
+std::vector<edge>	edges;
+
+std::vector<long long>	bellman_ford(int s) {
+	std::vector<long long>	dist(V+1, INF);
 	dist[s] = 0;
-	std::priority_queue<std::pair<int, int>>	pq;
-	pq.push({0, s});
+	for (int i=1;i<=V;++i) {
+		for (edge e : edges) {
+			int	from = e.from;
+			int	to = e.to;
+			int	cost = e.cost;
 
-	while (!pq.empty()) {
-		int	w = -pq.top().first;
-		int	v = pq.top().second;
-		pq.pop();
-
-		if (dist[v] < w)	continue;
-
-		for (auto a : adj[v]) {
-			int	vv = a.first;
-			int	ww = w + a.second;
-			if (dist[vv] > ww) {
-				dist[vv] = ww;
-				pq.push({-ww, vv});
+			if (dist[from] == INF)	continue;
+			if (dist[to] > dist[from] + cost) {
+				if (i == V) {
+					dist.clear();
+					return (dist);
+				}
+				dist[to] = dist[from] + cost;
 			}
 		}
 	}
@@ -43,17 +45,19 @@ int	main() {
 	for (int i=0;i<E;++i) {
 		int	u, v, w;
 		std::cin >> u >> v >> w;
-		adj[u].push_back({v, w});
-		adj[v].push_back({u, w});
+		edges.push_back({u, v, w});
 	}
-	std::vector<int>	path = dijkstra(1);
-
-	for (int i : path) {
-		if (i != INF)
-			std::cout << i;
-		else
-			std::cout << -1;
-		std::cout << '\n';
+	std::vector<long long>	path = bellman_ford(1);
+	if (path.empty())
+		std::cout << -1 << '\n';
+	else {
+		for (int i=2;i<=V;++i) {
+			if (path[i] != INF)
+				std::cout << path[i];
+			else
+				std::cout << -1;
+			std::cout << '\n';
+		}
 	}
 
 	return (0);

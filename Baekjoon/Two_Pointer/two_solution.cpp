@@ -18,23 +18,23 @@ int	main()
 
 	// solution
 	long long	sum, ans;
-	int	i(0), j(n-1), ii, jj;
-	ans = arr[i] + arr[j];
+	int	i(0), j(n-1), ii(i), jj(j);
 	std::sort(arr, arr+n);
+	ans = arr[i] + arr[j];
 	while (i < j) {
 		sum = arr[i] + arr[j];
-		if (sum == 0)
-			break ;
 		if (abs(ans) > abs(sum)) {
 			ans = sum;
 			ii = i;
 			jj = j;
 		}
-		else if (abs(arr[i]) < abs(arr[j]))
+		if (sum == 0)
+			break ;
+		if (abs(arr[i]) > abs(arr[j]))
 			i++;
 		else
 			j--;
 	}
-	std::cout << ans << '\n';
+	std::cout << arr[ii] << ' ' << arr[jj] << '\n';
 	return (0);
 }

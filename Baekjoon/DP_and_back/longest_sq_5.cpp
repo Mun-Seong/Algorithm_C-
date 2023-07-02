@@ -1,14 +1,14 @@
 // Baekjoon
-// 14002 가장 긴 증가하는 부분 수열 4
+// 14003 가장 긴 증가하는 부분 수열 5
 
 #include <iostream>
 #include <algorithm>
 #include <vector>
 
 int	n;
-int	seq[1001];
-int	dp[1001];
-int	path[1001];
+int	seq[1000001];
+int	dp[1000001];
+std::vector<int>	v;
 
 int	main()
 {
@@ -18,30 +18,26 @@ int	main()
 		std::cin >> seq[i];
 	
 	// solution
+
 	int	res(0), max_idx(0);
-	for (int i=1;i<=n;++i) {
-		dp[i] = 1;
-		path[i] = -1;
-	}
+	v.push_back(seq[1]);
 	for (int i=2; i<=n; ++i)
 	{
-		for (int j=1;j<i;++j)
-		{
-			if (seq[i] > seq[j])
-				dp[i] = std::max(dp[i], dp[j] + 1);
-			if (dp[i] == dp[j] + 1)
-				path[i] = j;
+		if (v[res] < seq[i]) {
+			v.push_back(seq[i]);
+			dp[i] = ++res;
+		}
+		else {
+			int pos = std::lower_bound(v.begin(), v.end(), seq[i]) - v.begin();
+			v[pos] = seq[i];
+			dp[i] = pos;
 		}
 	}
-	for (int i=1;i<=n;++i) {
-		if (res < dp[i]) {
-			res = dp[i];
-			max_idx = i;
-		}
-	}
-	std::cout << res << std::endl;
+
+	/** LIS_4와 동일 */
+	std::cout << res+1 << std::endl;
 	std::vector<int>	ans;	
-	for (int i=max_idx;i>=1;--i) {
+	for (int i=n;i>=0;--i) {
 		if (dp[i] == res) {
 			ans.push_back(seq[i]);
 			res--;
@@ -52,5 +48,6 @@ int	main()
 		std::cout << ans.back() << ' ';
 		ans.pop_back();
 	}
+	/** 거꾸로 출력 됨 수정 필요 */
 	return (0);
 }

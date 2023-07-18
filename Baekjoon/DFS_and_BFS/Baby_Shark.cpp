@@ -39,9 +39,12 @@ int bfs(int x, int y)
 
 int main()
 {
+	int bi(0), bj(0);
 	cin >> n >> m;
 	for(int i=1;i<=n;i++)
-		for(int j=1;j<=m;j++)
+		for(int j=1;j<=m;j++) {
 			cin >> board[i][j];
-	bfs();
+			if (board[i][j] == 9) { bi = i; bj = j; }
+		}
+	bfs(bi, bj);
 }

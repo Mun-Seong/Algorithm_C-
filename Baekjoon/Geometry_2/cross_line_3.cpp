@@ -1,5 +1,5 @@
 // Baekjoon
-// 17387 선분 교차 2
+// 20149 선분 교차 3
 
 #include <iostream>
 #include <algorithm>
@@ -22,8 +22,12 @@ typedef	struct s_point
 	bool operator <= (const s_point &a) const
 	{
 		if (x == a.x)
-			return (y<=a.y);
+			return (y <= a.y);
 		return (x <= a.x);
+	}
+	bool operator == (const s_point &a) const
+	{
+		return (x == a.x && y == a.y);
 	}
 }	point;
 
@@ -45,6 +49,31 @@ int	ccw(point a, point b, point c)
 
 line	a, b;
 
+void	get_cross_point(void)
+{
+	point	ab = a.s - a.e, cd = b.s - b.e;
+	double	da = ab.x * cd.y;
+	double	db = ab.y * cd.x;
+
+	std::cout << std::fixed;
+	std::cout.precision(9);
+	if (da - db == 0) {
+		if (a.e == b.s)
+			std::cout << a.e.x << ' ' << a.e.y << '\n';
+		else if (a.s == b.e)
+			std::cout << a.s.x << ' ' << a.s.y << '\n';
+		return ;
+	}
+	double	daa = (a.s.x * a.e.y) - (a.s.y * a.e.x);
+	double	dbb = (b.s.x * b.e.y) - (b.s.y * b.e.x);
+
+	double	x = ((daa * cd.x) - (ab.x * dbb))
+				/ (da - db);
+	double	y = ((daa * cd.y) - (ab.y * dbb))
+				/ (da - db);
+	std::cout << x << ' ' << y << '\n';
+}
+
 int	main()
 {
 	// input
@@ -54,21 +83,26 @@ int	main()
 	// solution
 	int	aa = ccw(a.s, a.e, b.s) * ccw(a.s, a.e, b.e);
 	int bb = ccw(b.s, b.e, a.s) * ccw(b.s, b.e, a.e);
+	// 교차 예정
 	if (aa <= 0 && bb <= 0) {
 		if (aa == 0 && bb == 0) {
 			if (a.e <= a.s)	std::swap(a.e, a.s);
 			if (b.e <= b.s)	std::swap(b.e, b.s);
-			if (a.s <= b.e && b.s <= a.e)
-				std::cout << 1;
+			if (a.s <= b.e && b.s <= a.e) {
+				std::cout << 1 << '\n';
+				if (a.s == b.s || a.s == b.e || a.e == b.s || a.e == b.e)
+					get_cross_point();
+			}
 			else
-				std::cout << 0;
+				std::cout << 0 << '\n';
 		}
-		else
-			std::cout << 1;
+		else {
+			std::cout << 1 << '\n';
+			get_cross_point();
+		}
 	}
 	else
-		std::cout << 0;
-	std::cout << '\n';
+		std::cout << 0 << '\n';
 	
 	return (0);
 }

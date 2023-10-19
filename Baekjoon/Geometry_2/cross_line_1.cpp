@@ -1,5 +1,5 @@
 // Baekjoon
-// 25308 방사형 그래프
+// 17386 선분 교차 1
 
 #include <iostream>
 #include <algorithm>
